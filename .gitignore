@@ -1,0 +1,57 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ---- Django ----
+*.log
+*.pot
+*.pyc
+db.sqlite3
+media/
+staticfiles/
+
+# ---- Environment & Settings ----
+.env
+venv/
+.env.*
+*.env
+/secrets.json
+
+# ---- IDE / Editor ----
+.vscode/
+.idea/
+*.swp
+
+# ---- OS files ----
+.DS_Store
+Thumbs.db
+
+# ---- Byte-compiled / Cache ----
+*.egg-info/
+.eggs/
+*.egg
+dist/
+build/
+pip-wheel-metadata/
+
+# ---- Coverage / Testing ----
+.coverage
+.tox/
+nosetests.xml
+coverage.xml
+htmlcov/
+
+# ---- Migrations (optional) ----
+# Uncomment if you want to exclude generated migration files
+# **/migrations/*.py
+# !**/migrations/__init__.py
+
+# ---- Node / Frontend (if using JS/CSS build tools) ----
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# ---- Other ----
+*.bak
+*.tmp
