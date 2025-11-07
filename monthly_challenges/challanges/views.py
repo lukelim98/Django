@@ -18,7 +18,7 @@ monthly_challanges = {
 
 }
 
-# Create your views here.
+# Create your views here.x
 
 
 def index(request):
@@ -31,6 +31,7 @@ def index(request):
     response_data = f"<ul>{list_items}</ul>"
     return HttpResponse(response_data)
 
+
 def monthly_challange_by_number(request, month):
     months = list(monthly_challanges.keys())
     if month > len(months):
@@ -41,10 +42,11 @@ def monthly_challange_by_number(request, month):
 
 
 def monthly_challange(request, month):
-    challange_text = None
     if month in monthly_challanges:
         challange_text = monthly_challanges[month]
-        response_data = f"<h1>{challange_text}</h1>"
+        return render(request, 'challanges/challange.html', {
+            'text': challange_text,
+            'month_name': month[0].upper() + month[1:]
+        })
     else:
         return HttpResponseNotFound("<h1>This month is not supported</h1>")
-    return HttpResponse(response_data)
