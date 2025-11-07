@@ -14,7 +14,7 @@ monthly_challanges = {
     'september': 'Get a good ld 5 that I need.',
     'october': 'Play RTA in summoners war.',
     'november': 'Study Linux.',
-    'december': 'Study Python Hacking.',
+    'december': None,
 
 }
 
@@ -24,13 +24,12 @@ monthly_challanges = {
 def index(request):
     list_items = ""
     months = list(monthly_challanges.keys())
+    month_path_list = []
     for month in months:
-        capitalized_month = month.capitalize()
-        month_path = reverse('month-challanges', args=[month])
-        list_items += f"<li><a href='{month_path}'> {capitalized_month}</li>"
-    response_data = f"<ul>{list_items}</ul>"
-    return HttpResponse(response_data)
-
+        month_path_list.append((month, reverse('month-challanges', args=[month])))
+    return render(request, 'challanges/index.html', {
+        'month_path_list': month_path_list
+    })
 
 def monthly_challange_by_number(request, month):
     months = list(monthly_challanges.keys())
@@ -46,7 +45,7 @@ def monthly_challange(request, month):
         challange_text = monthly_challanges[month]
         return render(request, 'challanges/challange.html', {
             'text': challange_text,
-            'month_name': month[0].upper() + month[1:]
+            'month_name': month
         })
     else:
         return HttpResponseNotFound("<h1>This month is not supported</h1>")
