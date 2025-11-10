@@ -1,8 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block css_files %}
+<link rel="stylesheet" href="{% static "challanges/challanges.css" %}">
+{% endblock %}
+
 {% block page_title %}
   All Challanges
 {% endblock %}
 {% block content %}
+  {% include 'challanges/includes/header.html' %}
   <ul>
     {% for month, path in month_path_list %}
       <li>
