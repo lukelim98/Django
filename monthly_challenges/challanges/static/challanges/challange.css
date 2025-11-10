@@ -1,0 +1,23 @@
+h1,
+h2 {
+    text-align: center;
+    color: white;
+}
+
+
+h1 {
+    font-size: 1.5rem;
+    margin: 2rem 0 1rem 0;
+    font-weight: normal;
+    color: rgb(205, 78, 205);
+}
+
+h2 {
+    color: white;
+    font-weight: bold;
+}
+
+.fallback {
+    text-align: center;
+    color: white;
+}
