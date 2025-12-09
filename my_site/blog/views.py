@@ -144,7 +144,8 @@ class PostDetailView(View):
         context = {
             "post": post,                       # Post object
             "post_tags": post.tags.all(),       # Related tags
-            "comment_form": CommentForm()       # Empty comment form
+            "comment_form": CommentForm(),      # Empty comment form
+            "comments": post.comments.all().order_by("-id")
         }
 
         # Render the post detail tempalte
@@ -182,7 +183,8 @@ class PostDetailView(View):
         context = {
             "post": post,
             "post_tags": post.tags.all(),
-            "comment_form": comment_form            # Form with validation errors
+            "comment_form": comment_form,            # Form with validation errors
+            "comments": post.comments.all().order_by("-id")
         }
         return render(request, "blog/post-detail.html", context)
     
