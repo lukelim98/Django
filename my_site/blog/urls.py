@@ -1,8 +1,37 @@
 from django.urls import path
 from . import views
 
+# ==========================
+# URL Configuration for Blog App
+# ==========================
+# This module deinfes all URL routes for the blog application.
+# Each path maps a URL pattern to a class-based view
 urlpatterns = [
-    path("", views.StartingPageView.as_view(), name='starting-page'),
-    path("posts", views.PostsView.as_view(), name='posts-page'),
-    path("post/<slug:slug>", views.PostDetailView.as_view(), name='post-detail-page')
+    
+    # Starting page (homepage)
+    # Example URL: /
+    # Displays the lates or featured blog posts
+    path(
+        "",
+        views.StartingPageView.as_view(),
+        name='starting-page'
+    ),
+
+    # Post list page
+    # Example URL: /posts
+    # Displays a list of all blog posts
+    path(
+        "posts",
+        views.PostsView.as_view(),
+        name='posts-page'
+    ),
+
+    # Single post detail page
+    # Example URL: /post/my-first-blog-post
+    # Uses a slug to uniquely identify and load a post
+    path(
+        "post/<slug:slug>",
+        views.PostDetailView.as_view(),
+        name='post-detail-page'
+    )
 ]
