@@ -33,5 +33,15 @@ urlpatterns = [
         "post/<slug:slug>",
         views.PostDetailView.as_view(),
         name='post-detail-page'
+    ),
+
+    # Read Later feature (session-based storage)
+    # Example URL: /read-later
+    # Handles POST requests to save or remove posts from the user's
+    # "Read Later" list, which is stored in the session
+    path(
+        "read-later",
+        views.ReadLaterView.as_view(),
+        name="read-later"
     )
 ]

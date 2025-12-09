@@ -75,6 +75,9 @@ class Post(models.Model):
         Tag 
     )                                                                  # Post can have multiple tags
 
+    def __str__(self):
+        return self.title
+
 # ========================================
 # Comment Model
 # ========================================

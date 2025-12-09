@@ -129,6 +129,15 @@ class PostDetailView(View):
     - Get request: Displays the post details and an empty comment form
     - POST request: Validates and saves a new comment for the post
     """
+
+    def is_stored_post(self, request, post_id):
+        stored_posts = request.session.get("stored_posts")
+        if stored_posts is not None:
+            is_saved_for_later = post_id in stored_posts
+        else:
+            is_saved_for_later = False
+        return is_saved_for_later
+
     def get(self, request, slug):
         """
         Handles GET requests.
@@ -145,7 +154,8 @@ class PostDetailView(View):
             "post": post,                       # Post object
             "post_tags": post.tags.all(),       # Related tags
             "comment_form": CommentForm(),      # Empty comment form
-            "comments": post.comments.all().order_by("-id")
+            "comments": post.comments.all().order_by("-id"),
+            "saved_for_later": self.is_stored_post(request, post.id)
         }
 
         # Render the post detail tempalte
@@ -184,7 +194,77 @@ class PostDetailView(View):
             "post": post,
             "post_tags": post.tags.all(),
             "comment_form": comment_form,            # Form with validation errors
-            "comments": post.comments.all().order_by("-id")
+            "comments": post.comments.all().order_by("-id"),
+            "saved_for_later": self.is_stored_post(request, post.id)
         }
         return render(request, "blog/post-detail.html", context)
     
+
+
+# =======================================
+# Read Later View (Session-Based Feature)
+# =======================================
+# This view manages the "Read Later" functionality for the blog
+#
+# Key Behavior:
+# - GET request: Displays all posts the user has saved for later
+#   (stored inside the session, so no login required).
+# - POST request: Adds a post ID to the user's session-based list.
+#
+# Notes:
+# - Data is stored per user session, not in the database.
+# - Ideal for casual users who read posts without creating accounts.
+class ReadLaterView(View):
+    def get(self, request):
+        """
+        Handles GET requests.
+
+        Displays all posts that the user previously marked
+        to "read later". If non exist, the template is informed.
+        """
+
+        # Retrieve saved post IDs from the session
+        stored_posts = request.session.get("stored_posts")
+
+        context = {}
+
+        # If no saved posts, send an empty list and flag
+        if stored_posts is None or len(stored_posts) == 0:
+            context["posts"] = []
+            context["has_posts"] = False
+        else:
+            # Fetch posts matching saved IDs
+            posts = Post.objects.filter(id__in=stored_posts)
+            context["posts"] = posts
+            context["has_posts"] = True
+
+        # REnder the page showing saved posts
+        return render(request, "blog/stored-posts.html", context)
+
+    def post(self, request):
+        """
+        Handles POST requests.
+
+        Saves a selected post ID to the user's session so they can
+        revisit it later. If the post is already stored, it is ignored.
+        """
+        
+        # Retrieve existing list from session (or create a new one)
+        stored_posts = request.session.get("stored_posts")
+        if stored_posts is None:
+            stored_posts = []
+
+        # Extract post ID from form submission
+        post_id = int(request.POST["post_id"])
+        
+        # Add the post if it is not already saved
+        if post_id not in stored_posts:
+            stored_posts.append(post_id)
+
+        else:
+            stored_posts.remove(post_id)
+        # Save updated list back to the session
+        request.session["stored_posts"] = stored_posts
+
+        # Redirect to the hompage after saving
+        return HttpResponseRedirect("/")
